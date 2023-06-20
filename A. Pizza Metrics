@@ -148,13 +148,78 @@ A. Pizza Metrics
 
 ---
 
-[View on DB Fiddle](https://www.db-fiddle.com/f/7VcQKQwsS3CTkGRFG7vu98/65)
+3. How many successful orders were delivered by each runner?
+---
 
-How many successful orders were delivered by each runner?
-How many of each type of pizza was delivered?
-How many Vegetarian and Meatlovers were ordered by each customer?
-What was the maximum number of pizzas delivered in a single order?
-For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
-How many pizzas were delivered that had both exclusions and extras?
-What was the total volume of pizzas ordered for each hour of the day?
-What was the volume of orders for each day of the week?
+**Query #3**
+
+    SELECT
+    	 runner_id, COUNT(order_id) 
+    FROM pizza_runner.runner_orders
+    WHERE Distance != 'null'
+    GROUP BY runner_id
+    ORDER BY runner_id;
+
+| runner_id | count |
+| --------- | ----- |
+| 1         | 4     |
+| 2         | 3     |
+| 3         | 1     |
+
+---
+
+4. How many of each type of pizza was delivered?
+
+**Query #4**
+
+    SELECT
+    	p.pizza_name, COUNT(c.pizza_id) 
+    FROM pizza_runner.customer_orders c
+    LEFT JOIN pizza_runner.pizza_names p
+    ON p.pizza_id = c.pizza_id
+    LEFT JOIN pizza_runner.runner_orders po
+    ON po.order_id = c.order_id
+    WHERE Distance != 'null'
+    GROUP BY p.pizza_name;
+
+| pizza_name | count |
+| ---------- | ----- |
+| Meatlovers | 9     |
+| Vegetarian | 3     |
+
+---
+
+5. How many Vegetarian and Meatlovers were ordered by each customer?
+---
+
+**Query #5**
+
+    SELECT
+    	c.customer_id, p.pizza_name, COUNT(c.pizza_id) 
+    FROM pizza_runner.customer_orders c
+    LEFT JOIN pizza_runner.pizza_names p
+    ON p.pizza_id = c.pizza_id
+    GROUP BY c.customer_id, p.pizza_name
+    ORDER BY c.customer_id;
+
+| customer_id | pizza_name | count |
+| ----------- | ---------- | ----- |
+| 101         | Meatlovers | 2     |
+| 101         | Vegetarian | 1     |
+| 102         | Meatlovers | 2     |
+| 102         | Vegetarian | 1     |
+| 103         | Meatlovers | 3     |
+| 103         | Vegetarian | 1     |
+| 104         | Meatlovers | 3     |
+| 105         | Vegetarian | 1     |
+
+---
+6. What was the maximum number of pizzas delivered in a single order?
+
+7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+
+8. How many pizzas were delivered that had both exclusions and extras?
+
+9.What was the total volume of pizzas ordered for each hour of the day?
+
+10. What was the volume of orders for each day of the week?

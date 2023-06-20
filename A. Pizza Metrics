@@ -215,11 +215,62 @@ A. Pizza Metrics
 
 ---
 6. What was the maximum number of pizzas delivered in a single order?
+---
+
+**Query #6**
+
+    SELECT 
+    	order_id, count(pizza_id) as pizza_count
+    FROM pizza_runner.customer_orders c
+    GROUP BY order_id
+    ORDER BY count(pizza_id) desc
+    LIMIT 1;
+
+| order_id | pizza_count |
+| -------- | ----------- |
+| 4        | 3           |
+
+---
 
 7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
 
 8. How many pizzas were delivered that had both exclusions and extras?
 
 9.What was the total volume of pizzas ordered for each hour of the day?
+**Query #9**
+
+    SELECT 
+    	EXTRACT(HOUR FROM order_time) as hour_day, count(pizza_id) as pizza_count
+    FROM pizza_runner.customer_orders c
+    GROUP BY hour_day
+    ORDER BY hour_day;
+
+| hour_day | pizza_count |
+| -------- | ----------- |
+| 11       | 1           |
+| 13       | 3           |
+| 18       | 3           |
+| 19       | 1           |
+| 21       | 3           |
+| 23       | 3           |
+
+---
 
 10. What was the volume of orders for each day of the week?
+**Query #10**
+
+    SELECT 
+    	TO_CHAR(order_time, 'day') as weekday, count(pizza_id) as pizza_count
+    FROM pizza_runner.customer_orders c
+    GROUP BY weekday;
+
+| weekday   | pizza_count |
+| --------- | ----------- |
+| wednesday | 5           |
+| thursday  | 3           |
+| friday    | 1           |
+| saturday  | 5           |
+
+---
+
+
